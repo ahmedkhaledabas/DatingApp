@@ -1,6 +1,7 @@
-﻿namespace DatingApp.Services
+﻿
+namespace DatingApp.Mapper
 {
-    public class TransformAppUser
+    public class MapAppUser
     {
         public static AppUserDTO UserToDTO(AppUser user)
         {
@@ -14,7 +15,7 @@
 
         public static List<AppUserDTO> UsersToDTOs(List<AppUser> users)
         {
-            List<AppUserDTO>? usersDto = new List<AppUserDTO> ();
+            List<AppUserDTO>? usersDto = new List<AppUserDTO>();
             foreach (AppUser user in users)
             {
                 AppUserDTO? dto = new AppUserDTO

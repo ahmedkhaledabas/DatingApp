@@ -1,4 +1,5 @@
-﻿namespace DatingApp.IRepository
+﻿
+namespace DatingApp.IRepository
 {
     public interface IUsersRepo
     {

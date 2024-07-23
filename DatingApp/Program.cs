@@ -1,5 +1,4 @@
 
-using DatingApp.Repository;
 
 WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +13,7 @@ builder.Services.AddDbContext<DatingAppDbContext>(
     option => option.UseSqlServer(builder.Configuration.GetConnectionString("name=ConnectionStrings:Default"))
 );
 builder.Services.AddScoped<IUsersRepo , UsersRepo>();
+builder.Services.AddScoped<IAppUserService, AppUserServices>();
 
 WebApplication? app = builder.Build();
 

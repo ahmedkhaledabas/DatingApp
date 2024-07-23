@@ -12,7 +12,7 @@ namespace DatingApp.Data.Migrations
 {
     [DbContext(typeof(DatingAppDbContext))]
     [Migration("20240723053828_initial")]
-    partial class initial
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

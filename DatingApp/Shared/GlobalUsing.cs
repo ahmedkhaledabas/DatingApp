@@ -15,4 +15,12 @@ global using DatingApp.DTOs;
 
 global using DatingApp.Services;
 
+global using DatingApp.Mapper;
+
+global using DatingApp.IServices;
+
+global using DatingApp.Repository;
+
+
+
 

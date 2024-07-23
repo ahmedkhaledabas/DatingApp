@@ -4,32 +4,23 @@
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUsersRepo usersRepo;
+        private readonly IAppUserService appUserService;
 
-        public UsersController(IUsersRepo usersRepo)
+        public UsersController(IAppUserService appUserService)
         {
-            this.usersRepo = usersRepo;
+            this.appUserService = appUserService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUserDTO>>> GetUsers() { 
-            List<AppUser> users = await usersRepo.GetUsers();
-            if (users.Count > 0)
-            {
-                return TransformAppUser.UsersToDTOs(users);
-            }
-            return NoContent();
+        public async Task<ActionResult<IEnumerable<AppUserDTO>>> GetUsers()
+        {
+            return await appUserService.GetAppUsers();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<AppUserDTO>> GetUser(int id)
         {
-            AppUser? user = await usersRepo.GetUser(id);
-            if (user is not null)
-            {
-                return TransformAppUser.UserToDTO(user);
-            }
-            return NoContent();
+            return await appUserService.GetAppUser(id);
         }
 
 
