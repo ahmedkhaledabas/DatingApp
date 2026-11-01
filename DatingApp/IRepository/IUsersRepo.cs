@@ -1,12 +1,9 @@
-﻿
 namespace DatingApp.IRepository
 {
     public interface IUsersRepo
     {
-        Task<List<AppUser>> GetUsers();
+        Task<List<AppUser>> GetUsers(CancellationToken cancellationToken = default);
 
-        Task<AppUser> GetUser(int id);
-
-
+        Task<AppUser?> GetUser(int id, CancellationToken cancellationToken = default);
     }
 }
