@@ -1,26 +1,24 @@
-﻿
 namespace DatingApp.Services
 {
     public class AppUserServices : IAppUserService
     {
-        private readonly IUsersRepo usersRepo; 
-        
+        private readonly IUsersRepo usersRepo;
+
         public AppUserServices(IUsersRepo usersRepo)
         {
             this.usersRepo = usersRepo;
         }
 
-        public async Task<AppUserDTO> GetAppUser(int id)
+        public async Task<AppUserDTO?> GetAppUser(int id, CancellationToken cancellationToken = default)
         {
-            AppUser? user = await usersRepo.GetUser(id);
-            return MapAppUser.UserToDTO(user);
+            var user = await usersRepo.GetUser(id, cancellationToken);
+            return user is null ? null : MapAppUser.UserToDTO(user);
         }
 
-        public async Task<List<AppUserDTO>> GetAppUsers()
+        public async Task<List<AppUserDTO>> GetAppUsers(CancellationToken cancellationToken = default)
         {
-            List<AppUser>? users = await usersRepo.GetUsers();
+            var users = await usersRepo.GetUsers(cancellationToken);
             return MapAppUser.UsersToDTOs(users);
         }
-
     }
 }
