@@ -1,4 +1,3 @@
-﻿
 namespace DatingApp.Repository
 {
     public class UsersRepo : IUsersRepo
@@ -10,23 +9,19 @@ namespace DatingApp.Repository
             this.context = context;
         }
 
-        public async Task<AppUser> GetUser(int id)
+        public Task<AppUser?> GetUser(int id, CancellationToken cancellationToken = default)
         {
-            AppUser? user = await context.users.FindAsync(id);
-            if (user is not null)
-            {
-                return user;
-            }
-            return new AppUser();
+            return context.users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
         }
 
-        public async Task<List<AppUser>> GetUsers()
+        public Task<List<AppUser>> GetUsers(CancellationToken cancellationToken = default)
         {
-            List<AppUser>? users = await context.users.ToListAsync();
-            if(users is not null && users.Count > 0)
-            return users;
-            //modified to class with obj , status , msg Props
-            return new List<AppUser>();
+            return context.users
+                .AsNoTracking()
+                .OrderBy(user => user.Id)
+                .ToListAsync(cancellationToken);
         }
     }
 }
