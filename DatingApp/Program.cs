@@ -1,33 +1,35 @@
+var builder = WebApplication.CreateBuilder(args);
 
-
-WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("Default");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "The database connection string 'Default' is missing. Configure ConnectionStrings:Default.");
+}
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
+builder.Services.AddHealthChecks();
 
-builder.Services.AddDbContext<DatingAppDbContext>(
-    option => option.UseSqlServer(builder.Configuration.GetConnectionString("name=ConnectionStrings:Default"))
-);
-builder.Services.AddScoped<IUsersRepo , UsersRepo>();
+builder.Services.AddDbContext<DatingAppDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<IUsersRepo, UsersRepo>();
 builder.Services.AddScoped<IAppUserService, AppUserServices>();
 
-WebApplication? app = builder.Build();
+var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
+app.MapHealthChecks("/health");
 app.MapControllers();
 
 app.Run();

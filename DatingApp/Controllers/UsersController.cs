@@ -1,4 +1,4 @@
-﻿namespace DatingApp.Controllers
+namespace DatingApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -12,17 +12,25 @@
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUserDTO>>> GetUsers()
+        [ProducesResponseType(typeof(IEnumerable<AppUserDTO>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<AppUserDTO>>> GetUsers(CancellationToken cancellationToken)
         {
-            return await appUserService.GetAppUsers();
+            var users = await appUserService.GetAppUsers(cancellationToken);
+            return Ok(users);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AppUserDTO>> GetUser(int id)
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(AppUserDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<AppUserDTO>> GetUser(int id, CancellationToken cancellationToken)
         {
-            return await appUserService.GetAppUser(id);
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            var user = await appUserService.GetAppUser(id, cancellationToken);
+            return user is null ? NotFound() : Ok(user);
         }
-
-
     }
 }
